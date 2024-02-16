@@ -1,12 +1,12 @@
 import { query } from "./_generated/server";
 import { v } from "convex/values";
-import {getAllOrThrow} from  'convex-helpers/server/relationships';
+import { getAllOrThrow } from "convex-helpers/server/relationships";
 
 export const get = query({
   args: {
     orgId: v.string(),
     search: v.optional(v.string()),
-    favorites: v.optional(v.string())
+    favorites: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -15,25 +15,23 @@ export const get = query({
       throw new Error("Unauthorized");
     }
 
-    if(args.favorites) {
-      const favoriteBoards = await ctx.db.query("userFavorites").withIndex("by_user_org", (q) =>
-      q.eq("userId", identity.subject)
-      .eq("orgId", args.orgId)
-      )
-      .order("desc")
-      .collect()
+    if (args.favorites) {
+      const favoriteBoards = await ctx.db
+        .query("userFavorites")
+        .withIndex("by_user_org", (q) =>
+          q.eq("userId", identity.subject).eq("orgId", args.orgId)
+        )
+        .order("desc")
+        .collect();
 
-      const ids = favoriteBoards.map((board)=>board.boardId);
+      const ids = favoriteBoards.map((board) => board.boardId);
 
-      const boards  = await getAllOrThrow(ctx.db, ids);
+      const boards = await getAllOrThrow(ctx.db, ids);
 
-      return boards.map((board)=>({
+      return boards.map((board) => ({
         ...board,
-        isFavorite: true
-      }))
-
-
-
+        isFavorite: true,
+      }));
     }
     const title = args.search as string;
 

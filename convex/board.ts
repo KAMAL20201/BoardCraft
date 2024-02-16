@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 
 const images = [
   "/placeholders/1.svg",
@@ -53,16 +53,16 @@ export const remove = mutation({
 
     const userId = identity.subject;
 
-    const existingFavorite  = await ctx.db.query("userFavorites").withIndex("by_user_board", (q)=>
-    q.eq("userId", userId)
-    .eq("boardId", args.id)
-    )
-    .unique()
+    const existingFavorite = await ctx.db
+      .query("userFavorites")
+      .withIndex("by_user_board", (q) =>
+        q.eq("userId", userId).eq("boardId", args.id)
+      )
+      .unique();
 
-    if(existingFavorite) {
-      await ctx.db.delete(existingFavorite._id)
+    if (existingFavorite) {
+      await ctx.db.delete(existingFavorite._id);
     }
-    
 
     //todo: latest check to delete favorite relation as well
     await ctx.db.delete(args.id);
@@ -160,6 +160,15 @@ export const unfavorite = mutation({
     }
 
     await ctx.db.delete(existingFavorite._id);
+
+    return board;
+  },
+});
+
+export const get = query({
+  args: { id: v.id("boards") },
+  handler: (ctx, args) => {
+    const board = ctx.db.get(args.id);
 
     return board;
   },
