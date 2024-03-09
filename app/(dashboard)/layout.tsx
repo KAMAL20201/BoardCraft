@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Navbar from "./_components/navbar";
 import OrgSidebar from "./_components/org-sidebar";
 import Sidebar from "./_components/sidebar";
@@ -12,7 +13,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       <Sidebar />
       <div className="pl-[60px] h-full">
         <div className="flex gap-x-3 h-full">
-          <OrgSidebar />
+          <Suspense>
+            <OrgSidebar />
+          </Suspense>
+
           <div className="h-full flex-1">
             <Navbar />
             {children}

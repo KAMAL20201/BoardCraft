@@ -112,3 +112,5 @@ const SelectionTools = memo(
 );
 
 export default SelectionTools;
+
+SelectionTools.displayName = "SelectionTools";
