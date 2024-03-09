@@ -32,10 +32,8 @@ export const Actions = ({
   id,
   title,
 }: ActionProps) => {
-
-
   const { mutate, pending } = useApiMutation(api.board.remove);
-  const { onOpen}= useRenameModal();
+  const { onOpen } = useRenameModal();
 
   const onCopyLink = () => {
     navigator.clipboard
@@ -72,7 +70,10 @@ export const Actions = ({
           <Link2 className="h-4 w-4 mr-2" />
           Copy board link
         </DropdownMenuItem>
-        <DropdownMenuItem className="p-3 cursor-pointer" onClick={()=>onOpen(id, title)}>
+        <DropdownMenuItem
+          className="p-3 cursor-pointer"
+          onClick={() => onOpen(id, title)}
+        >
           <Pencil className="h-4 w-4 mr-2" />
           Rename
         </DropdownMenuItem>
@@ -82,7 +83,10 @@ export const Actions = ({
           disabled={pending}
           onConfirm={onDelete}
         >
-          <Button variant="ghost" className="p-3 cursor-pointer text-sm w-full justify-start font-normal">
+          <Button
+            variant="ghost"
+            className="p-3 cursor-pointer text-sm w-full justify-start font-normal"
+          >
             <Trash2 className="h-4 w-4 mr-2" />
             Delete
           </Button>
