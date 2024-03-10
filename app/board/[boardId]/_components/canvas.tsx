@@ -449,7 +449,6 @@ const Canvas = ({ boardId }: CanvasProps) => {
               />
             )}
           <CursorsPresence />
-          <CursorsPresence />
           {pencilDraft != null && pencilDraft.length > 0 && (
             <Path
               points={pencilDraft}
